@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>THÀNH</h2>
+<p>KTHANH</p>
+
+<code>
+x = 5;
+y = 6;
+z = x + y;
+</code>
+
+</body>
+</html>
