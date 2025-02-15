@@ -26,6 +26,7 @@ a:active {
 </head>
 <body>
 
+<<<<<<< HEAD
 <h2>Link Colors</h2>
 
 <p>You can change the default colors of links</p>
@@ -34,3 +35,14 @@ a:active {
 
 </body>
 </html>
+=======
+<h2>thành</h2>
+
+<p>kim thành-2121050195</p>
+
+<a href="html_images.asp" target="_blank">KKT</a> 
+
+</body>
+</html>
+
+>>>>>>> 22b3cfe2c75aa6ec744f56f65371454116e5dd32
