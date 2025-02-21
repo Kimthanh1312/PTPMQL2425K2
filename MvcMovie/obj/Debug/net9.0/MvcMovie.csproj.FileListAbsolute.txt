@@ -98,8 +98,8 @@ D:\BTH_HTML_And_W3CSS\PTPMQL\MvcMovie\obj\Debug\net9.0\MvcMovie.genruntimeconfig
 D:\BTH_HTML_And_W3CSS\PTPMQL\MvcMovie\obj\Debug\net9.0\ref\MvcMovie.dll
 D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\appsettings.Development.json
 D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\appsettings.json
-D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\MvcMovie.staticwebassets.endpoints.json
 D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\MvcMovie.staticwebassets.runtime.json
+D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\MvcMovie.staticwebassets.endpoints.json
 D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\MvcMovie.exe
 D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\MvcMovie.deps.json
 D:\BTH_HTML_And_W3CSS\MvcMovie\bin\Debug\net9.0\MvcMovie.runtimeconfig.json
