@@ -16,38 +16,58 @@ namespace MvcMovie.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
-            modelBuilder.Entity("MvcMovie.Models.Employee", b =>
+            modelBuilder.Entity("HeThongPhanPhoi", b =>
                 {
-                    b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
+                    b.Property<string>("MaHTPP")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Age")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("FullName")
+                    b.Property<string>("TenHTPP")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PersonId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                    b.HasKey("MaHTPP");
 
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("EmployeeId");
-
-                    b.ToTable("Employees");
+                    b.ToTable("HeThongPhanPhois");
                 });
 
-            modelBuilder.Entity("Person", b =>
+            modelBuilder.Entity("MvcMovie.Models.DaiLy", b =>
+                {
+                    b.Property<string>("MaDaiLy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DiaChi")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DienThoai")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HeThongPhanPhoiMaHTPP")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MaHTPP")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NguoiDaiDien")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TenDaiLy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MaDaiLy");
+
+                    b.HasIndex("HeThongPhanPhoiMaHTPP");
+
+                    b.HasIndex("MaHTPP");
+
+                    b.ToTable("DaiLys");
+                });
+
+            modelBuilder.Entity("MvcMovie.Models.Person", b =>
                 {
                     b.Property<string>("PersonId")
                         .HasColumnType("TEXT");
@@ -56,8 +76,9 @@ namespace MvcMovie.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Discriminator")
                         .IsRequired()
+                        .HasMaxLength(8)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FullName")
@@ -67,6 +88,44 @@ namespace MvcMovie.Migrations
                     b.HasKey("PersonId");
 
                     b.ToTable("Persons");
+
+                    b.HasDiscriminator().HasValue("Person");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("MvcMovie.Models.Employee", b =>
+                {
+                    b.HasBaseType("MvcMovie.Models.Person");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Employee");
+                });
+
+            modelBuilder.Entity("MvcMovie.Models.DaiLy", b =>
+                {
+                    b.HasOne("HeThongPhanPhoi", null)
+                        .WithMany("DaiLys")
+                        .HasForeignKey("HeThongPhanPhoiMaHTPP");
+
+                    b.HasOne("HeThongPhanPhoi", "HeThongPhanPhoi")
+                        .WithMany()
+                        .HasForeignKey("MaHTPP")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HeThongPhanPhoi");
+                });
+
+            modelBuilder.Entity("HeThongPhanPhoi", b =>
+                {
+                    b.Navigation("DaiLys");
                 });
 #pragma warning restore 612, 618
         }

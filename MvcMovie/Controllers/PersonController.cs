@@ -1,13 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MvcMovie.Data;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using MvcMovie.Data;
+using MvcMovie.Models;
 
 namespace MvcMovie.Controllers
 {
-    [DebuggerDisplay("{GetDebuggerDisplay(),nq}")]
     public class PersonController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,52 +19,139 @@ namespace MvcMovie.Controllers
             _context = context;
         }
 
-        // DELETE: Person/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        // GET: Person
+        public async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(id))
+            return View(await _context.Persons.ToListAsync());
+        }
+
+        // GET: Person/Details/5
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var person = await _context.Persons.FindAsync(id);
-
-            // Kiểm tra nếu không tìm thấy người
+            var person = await _context.Persons
+                .FirstOrDefaultAsync(m => m.PersonId == id);
             if (person == null)
             {
                 return NotFound();
             }
 
-            try
+            return View(person);
+        }
+
+        // GET: Person/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Person/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("PersonId,FullName,Address")] Person person)
+        {
+            if (ModelState.IsValid)
             {
-                _context.Persons.Remove(person);
+                _context.Add(person);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException)
+            return View(person);
+        }
+
+        // GET: Person/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
             {
-                // Đoạn này xử lý trường hợp ngoại lệ khi xóa người
-                ModelState.AddModelError("", "There was an error deleting the person. Please try again later.");
-                // Nếu cần, log lỗi chi tiết:
-                // _logger.LogError(ex, "Error deleting person with ID {Id}", id);
+                return NotFound();
             }
 
+            var person = await _context.Persons.FindAsync(id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+            return View(person);
+        }
+
+        // POST: Person/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("PersonId,FullName,Address")] Person person)
+        {
+            if (id != person.PersonId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(person);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PersonExists(person.PersonId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(person);
+        }
+
+        // GET: Person/Delete/5
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var person = await _context.Persons
+                .FirstOrDefaultAsync(m => m.PersonId == id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            return View(person);
+        }
+
+        // POST: Person/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var person = await _context.Persons.FindAsync(id);
+            if (person != null)
+            {
+                _context.Persons.Remove(person);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        // Kiểm tra xem person có tồn tại hay không
         private bool PersonExists(string id)
         {
-            return !string.IsNullOrEmpty(id) && _context.Persons.Any(e => e.PersonId == id);
-        }
-
-        // Cải tiến DebuggerDisplay, cung cấp thông tin chi tiết về person
-        private string GetDebuggerDisplay()
-        {
-            // Trả về thông tin chi tiết về Person nếu có
-            var person = _context.Persons.FirstOrDefault(p => p.PersonId == "specific_id"); // Sửa 'specific_id' theo yêu cầu
-            return person != null ? $"Person: {person.PersonId}, Name: {person.FullName}" : "Person not found";
+            return _context.Persons.Any(e => e.PersonId == id);
         }
     }
 }
